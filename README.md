@@ -1,4 +1,4 @@
-# Camera Plugin
+# Camera_ignore_kitkat Plugin
 
 This plugin is following [camera](https://pub.dartlang.org/packages/camera) plugin.
 
