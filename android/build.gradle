@@ -1,5 +1,5 @@
-group 'io.flutter.plugins.camera'
-version '1.0-SNAPSHOT'
+group 'flutter.moum.camera_ignore_kitkat'
+version '1.0'
 
 buildscript {
     repositories {
@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.5.0'
     }
 }
 
@@ -26,24 +26,12 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
         disable 'InvalidPackage'
     }
     compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
-    dependencies {
-        implementation 'androidx.annotation:annotation:1.0.0'
-        implementation 'androidx.core:core:1.0.0'
-    }
-    testOptions {
-        unitTests.returnDefaultValues = true
-    }
-}
-
-dependencies {
-    testImplementation 'junit:junit:4.12'
 }
