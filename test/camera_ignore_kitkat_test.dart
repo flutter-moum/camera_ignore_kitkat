@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:camera_ignore_kitkat/camera_ignore_kitkat.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('camera_ignore_kitkat');
@@ -17,7 +16,4 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
-    expect(await CameraIgnoreKitkat.platformVersion, '42');
-  });
 }
