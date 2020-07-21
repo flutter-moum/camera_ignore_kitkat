@@ -11,7 +11,7 @@ import 'package:flutter/widgets.dart';
 
 part 'camera_image.dart';
 
-final MethodChannel _channel = const MethodChannel('plugins.flutter.io/camera');
+final MethodChannel _channel = const MethodChannel('flutter.moum.camera');
 
 enum CameraLensDirection { front, back, external }
 
@@ -405,7 +405,7 @@ class CameraController extends ValueNotifier<CameraValue> {
       throw CameraException(e.code, e.message);
     }
     const EventChannel cameraEventChannel =
-        EventChannel('plugins.flutter.io/camera/imageStream');
+        EventChannel('flutter.moum.camera.imageStream');
     _imageStreamSubscription =
         cameraEventChannel.receiveBroadcastStream().listen(
       (dynamic imageData) {

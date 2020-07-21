@@ -6,10 +6,7 @@
 .packages
 .pub/
 .dart_tool/
-pubspec.lock
 flutter_export_environment.sh
-
-examples/all_plugins/pubspec.yaml
 
 Podfile
 Podfile.lock
