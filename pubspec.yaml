@@ -1,0 +1,33 @@
+name: camera_ignore_kitkat
+description: This plugin follows `camera` plugin.
+  Only other thing is that you can build under minSdk 20 (kitkat) without camera working.
+  This plugin is only for build without minSdk changes.
+version: 0.5.8+3
+publisher: Songyi Yu <songyi0207@gmail.com>
+homepage: https://github.com/flutter-moum/camera_ignore_kitkat
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  path_provider: ^0.5.0
+  video_player: ^0.10.0
+  flutter_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  pedantic: ^1.8.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: flutter.moum.camera_ignore_kitkat
+        pluginClass: CameraPlugin
+      ios:
+        pluginClass: CameraPlugin
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+  flutter: ">=1.12.13+hotfix.5 <2.0.0"
