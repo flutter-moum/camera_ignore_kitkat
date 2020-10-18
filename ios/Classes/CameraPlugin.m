@@ -633,7 +633,7 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
 - (void)startImageStreamWithMessenger:(NSObject<FlutterBinaryMessenger> *)messenger {
   if (!_isStreamingImages) {
     FlutterEventChannel *eventChannel =
-        [FlutterEventChannel eventChannelWithName:@"plugins.flutter.io/camera/imageStream"
+        [FlutterEventChannel eventChannelWithName:@"flutter.moum.camera.imageStream"
                                   binaryMessenger:messenger];
 
     _imageStreamHandler = [[FLTImageStreamHandler alloc] init];
@@ -759,7 +759,7 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
 }
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
   FlutterMethodChannel *channel =
-      [FlutterMethodChannel methodChannelWithName:@"plugins.flutter.io/camera"
+      [FlutterMethodChannel methodChannelWithName:@"flutter.moum.camera"
                                   binaryMessenger:[registrar messenger]];
   CameraPlugin *instance = [[CameraPlugin alloc] initWithRegistry:[registrar textures]
                                                         messenger:[registrar messenger]];
