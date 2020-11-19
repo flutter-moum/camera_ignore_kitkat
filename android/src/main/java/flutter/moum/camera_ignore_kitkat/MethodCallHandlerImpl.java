@@ -28,19 +28,19 @@ final class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   private @Nullable Camera camera;
 
   MethodCallHandlerImpl(
-      Activity activity,
-      BinaryMessenger messenger,
-      CameraPermissions cameraPermissions,
-      PermissionsRegistry permissionsAdder,
-      TextureRegistry textureRegistry) {
+          Activity activity,
+          BinaryMessenger messenger,
+          CameraPermissions cameraPermissions,
+          PermissionsRegistry permissionsAdder,
+          TextureRegistry textureRegistry) {
     this.activity = activity;
     this.messenger = messenger;
     this.cameraPermissions = cameraPermissions;
     this.permissionsRegistry = permissionsAdder;
     this.textureRegistry = textureRegistry;
 
-    methodChannel = new MethodChannel(messenger, "flutter.moum.camera");
-    imageStreamChannel = new EventChannel(messenger, "flutter.moum.camera.imageStream");
+    methodChannel = new MethodChannel(messenger, "plugins.flutter.io/camera");
+    imageStreamChannel = new EventChannel(messenger, "plugins.flutter.io/camera/imageStream");
     methodChannel.setMethodCallHandler(this);
   }
 
@@ -55,87 +55,87 @@ final class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
         }
         break;
       case "initialize":
-        {
-          if (camera != null) {
-            camera.close();
-          }
-          cameraPermissions.requestPermissions(
-              activity,
-              permissionsRegistry,
-              call.argument("enableAudio"),
-              (String errCode, String errDesc) -> {
-                if (errCode == null) {
-                  try {
-                    instantiateCamera(call, result);
-                  } catch (Exception e) {
-                    handleException(e, result);
+      {
+        if (camera != null) {
+          camera.close();
+        }
+        cameraPermissions.requestPermissions(
+                activity,
+                permissionsRegistry,
+                call.argument("enableAudio"),
+                (String errCode, String errDesc) -> {
+                  if (errCode == null) {
+                    try {
+                      instantiateCamera(call, result);
+                    } catch (Exception e) {
+                      handleException(e, result);
+                    }
+                  } else {
+                    result.error(errCode, errDesc, null);
                   }
-                } else {
-                  result.error(errCode, errDesc, null);
-                }
-              });
+                });
 
-          break;
-        }
+        break;
+      }
       case "takePicture":
-        {
-          camera.takePicture(call.argument("path"), result);
-          break;
-        }
+      {
+        camera.takePicture(call.argument("path"), result);
+        break;
+      }
       case "prepareForVideoRecording":
-        {
-          // This optimization is not required for Android.
-          result.success(null);
-          break;
-        }
+      {
+        // This optimization is not required for Android.
+        result.success(null);
+        break;
+      }
       case "startVideoRecording":
-        {
-          camera.startVideoRecording(call.argument("filePath"), result);
-          break;
-        }
+      {
+        camera.startVideoRecording(call.argument("filePath"), result);
+        break;
+      }
       case "stopVideoRecording":
-        {
-          camera.stopVideoRecording(result);
-          break;
-        }
+      {
+        camera.stopVideoRecording(result);
+        break;
+      }
       case "pauseVideoRecording":
-        {
-          camera.pauseVideoRecording(result);
-          break;
-        }
+      {
+        camera.pauseVideoRecording(result);
+        break;
+      }
       case "resumeVideoRecording":
-        {
-          camera.resumeVideoRecording(result);
-          break;
-        }
+      {
+        camera.resumeVideoRecording(result);
+        break;
+      }
       case "startImageStream":
-        {
-          try {
-            camera.startPreviewWithImageStream(imageStreamChannel);
-            result.success(null);
-          } catch (Exception e) {
-            handleException(e, result);
-          }
-          break;
-        }
-      case "stopImageStream":
-        {
-          try {
-            camera.startPreview();
-            result.success(null);
-          } catch (Exception e) {
-            handleException(e, result);
-          }
-          break;
-        }
-      case "dispose":
-        {
-          if (camera != null) {
-            camera.dispose();
-          }
+      {
+        try {
+          camera.startPreviewWithImageStream(imageStreamChannel);
           result.success(null);
-          break;
+        } catch (Exception e) {
+          handleException(e, result);
         }
+        break;
+      }
+      case "stopImageStream":
+      {
+        try {
+          camera.startPreview();
+          result.success(null);
+        } catch (Exception e) {
+          handleException(e, result);
+        }
+        break;
+      }
+      case "dispose":
+      {
+        if (camera != null) {
+          camera.dispose();
+        }
+        result.success(null);
+        break;
+      }
       default:
         result.notImplemented();
         break;
@@ -151,16 +151,16 @@ final class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     String resolutionPreset = call.argument("resolutionPreset");
     boolean enableAudio = call.argument("enableAudio");
     TextureRegistry.SurfaceTextureEntry flutterSurfaceTexture =
-        textureRegistry.createSurfaceTexture();
+            textureRegistry.createSurfaceTexture();
     DartMessenger dartMessenger = new DartMessenger(messenger, flutterSurfaceTexture.id());
     camera =
-        new Camera(
-            activity,
-            flutterSurfaceTexture,
-            dartMessenger,
-            cameraName,
-            resolutionPreset,
-            enableAudio);
+            new Camera(
+                    activity,
+                    flutterSurfaceTexture,
+                    dartMessenger,
+                    cameraName,
+                    resolutionPreset,
+                    enableAudio);
 
     camera.open(result);
   }
@@ -175,6 +175,7 @@ final class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
       return;
     }
 
+    // CameraAccessException can not be cast to a RuntimeException.
     throw (RuntimeException) exception;
   }
 }

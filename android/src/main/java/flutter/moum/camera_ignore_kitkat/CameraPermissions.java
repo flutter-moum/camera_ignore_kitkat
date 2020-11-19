@@ -4,7 +4,9 @@ import android.Manifest;
 import android.Manifest.permission;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -14,7 +16,9 @@ import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 final class CameraPermissions {
   interface PermissionsRegistry {
-    void addListener(RequestPermissionsResultListener handler);
+    @SuppressWarnings("deprecation")
+    void addListener(
+            io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener handler);
   }
 
   interface ResultCallback {
@@ -25,27 +29,27 @@ final class CameraPermissions {
   private boolean ongoing = false;
 
   void requestPermissions(
-      Activity activity,
-      PermissionsRegistry permissionsRegistry,
-      boolean enableAudio,
-      ResultCallback callback) {
+          Activity activity,
+          PermissionsRegistry permissionsRegistry,
+          boolean enableAudio,
+          ResultCallback callback) {
     if (ongoing) {
       callback.onResult("cameraPermission", "Camera permission request ongoing");
     }
     if (!hasCameraPermission(activity) || (enableAudio && !hasAudioPermission(activity))) {
       permissionsRegistry.addListener(
-          new CameraRequestPermissionsListener(
-              (String errorCode, String errorDescription) -> {
-                ongoing = false;
-                callback.onResult(errorCode, errorDescription);
-              }));
+              new CameraRequestPermissionsListener(
+                      (String errorCode, String errorDescription) -> {
+                        ongoing = false;
+                        callback.onResult(errorCode, errorDescription);
+                      }));
       ongoing = true;
       ActivityCompat.requestPermissions(
-          activity,
-          enableAudio
-              ? new String[] {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}
-              : new String[] {Manifest.permission.CAMERA},
-          CAMERA_REQUEST_ID);
+              activity,
+              enableAudio
+                      ? new String[] {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}
+                      : new String[] {Manifest.permission.CAMERA},
+              CAMERA_REQUEST_ID);
     } else {
       // Permissions already exist. Call the callback with success.
       callback.onResult(null, null);
@@ -54,17 +58,18 @@ final class CameraPermissions {
 
   private boolean hasCameraPermission(Activity activity) {
     return ContextCompat.checkSelfPermission(activity, permission.CAMERA)
-        == PackageManager.PERMISSION_GRANTED;
+            == PackageManager.PERMISSION_GRANTED;
   }
 
   private boolean hasAudioPermission(Activity activity) {
     return ContextCompat.checkSelfPermission(activity, permission.RECORD_AUDIO)
-        == PackageManager.PERMISSION_GRANTED;
+            == PackageManager.PERMISSION_GRANTED;
   }
 
   @VisibleForTesting
+  @SuppressWarnings("deprecation")
   static final class CameraRequestPermissionsListener
-      implements PluginRegistry.RequestPermissionsResultListener {
+          implements io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener {
 
     // There's no way to unregister permission listeners in the v1 embedding, so we'll be called
     // duplicate times in cases where the user denies and then grants a permission. Keep track of if

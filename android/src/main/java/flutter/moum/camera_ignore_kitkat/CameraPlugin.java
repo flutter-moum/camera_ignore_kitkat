@@ -38,7 +38,7 @@ public final class CameraPlugin implements FlutterPlugin, ActivityAware {
   /**
    * Initialize this within the {@code #configureFlutterEngine} of a Flutter activity or fragment.
    *
-   * <p>See {@code flutter.moum.camera_ignore_kitkat.MainActivity} for an example.
+   * <p>See {@code io.flutter.plugins.camera.MainActivity} for an example.
    */
   public CameraPlugin() {}
 
@@ -49,13 +49,14 @@ public final class CameraPlugin implements FlutterPlugin, ActivityAware {
    * <p>Calling this automatically initializes the plugin. However plugins initialized this way
    * won't react to changes in activity or context, unlike {@link CameraPlugin}.
    */
-  public static void registerWith(Registrar registrar) {
+  @SuppressWarnings("deprecation")
+  public static void registerWith(io.flutter.plugin.common.PluginRegistry.Registrar registrar) {
     CameraPlugin plugin = new CameraPlugin();
     plugin.maybeStartListening(
-        registrar.activity(),
-        registrar.messenger(),
-        registrar::addRequestPermissionsResultListener,
-        registrar.view());
+            registrar.activity(),
+            registrar.messenger(),
+            registrar::addRequestPermissionsResultListener,
+            registrar.view());
   }
 
   @Override
@@ -71,10 +72,10 @@ public final class CameraPlugin implements FlutterPlugin, ActivityAware {
   @Override
   public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
     maybeStartListening(
-        binding.getActivity(),
-        flutterPluginBinding.getBinaryMessenger(),
-        binding::addRequestPermissionsResultListener,
-        flutterPluginBinding.getFlutterEngine().getRenderer());
+            binding.getActivity(),
+            flutterPluginBinding.getBinaryMessenger(),
+            binding::addRequestPermissionsResultListener,
+            flutterPluginBinding.getTextureRegistry());
   }
 
   @Override
@@ -99,17 +100,17 @@ public final class CameraPlugin implements FlutterPlugin, ActivityAware {
   }
 
   private void maybeStartListening(
-      Activity activity,
-      BinaryMessenger messenger,
-      PermissionsRegistry permissionsRegistry,
-      TextureRegistry textureRegistry) {
+          Activity activity,
+          BinaryMessenger messenger,
+          PermissionsRegistry permissionsRegistry,
+          TextureRegistry textureRegistry) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
       // If the sdk is less than 21 (min sdk for Camera2) we don't register the plugin.
       return;
     }
 
     methodCallHandler =
-        new MethodCallHandlerImpl(
-            activity, messenger, new CameraPermissions(), permissionsRegistry, textureRegistry);
+            new MethodCallHandlerImpl(
+                    activity, messenger, new CameraPermissions(), permissionsRegistry, textureRegistry);
   }
 }

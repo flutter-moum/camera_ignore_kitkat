@@ -1,7 +1,3 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 part of 'camera.dart';
 
 /// A single color plane of image data.
@@ -91,10 +87,10 @@ ImageFormatGroup _asImageFormatGroup(dynamic rawFormat) {
 
   if (defaultTargetPlatform == TargetPlatform.iOS) {
     switch (rawFormat) {
-      // kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
+    // kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
       case 875704438:
         return ImageFormatGroup.yuv420;
-      // kCVPixelFormatType_32BGRA
+    // kCVPixelFormatType_32BGRA
       case 1111970369:
         return ImageFormatGroup.bgra8888;
     }
