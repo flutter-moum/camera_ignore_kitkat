@@ -9,7 +9,7 @@ import java.util.Map;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
-
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 class DartMessenger {
   @Nullable private EventChannel.EventSink eventSink;
 

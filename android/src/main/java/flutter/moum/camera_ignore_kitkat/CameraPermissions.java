@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat;
 
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
-
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 final class CameraPermissions {
   interface PermissionsRegistry {
     void addListener(RequestPermissionsResultListener handler);
