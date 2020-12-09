@@ -1,14 +1,58 @@
 # camera_ignore_kitkat
+A Flutter plugin for iOS and Android allowing access to the device cameras.
+Support Android min sdk 17.
+### Example
 
-A new flutter plugin project.
+Here is a small example flutter app displaying a full screen camera preview.
 
-## Getting Started
+```dart
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+List<CameraDescription> cameras;
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  cameras = await availableCameras();
+  runApp(CameraApp());
+}
+
+class CameraApp extends StatefulWidget {
+  @override
+  _CameraAppState createState() => _CameraAppState();
+}
+
+class _CameraAppState extends State<CameraApp> {
+  CameraController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = CameraController(cameras[0], ResolutionPreset.medium);
+    controller.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!controller.value.isInitialized) {
+      return Container();
+    }
+    return AspectRatio(
+        aspectRatio:
+        controller.value.aspectRatio,
+        child: CameraPreview(controller));
+  }
+}
+```
